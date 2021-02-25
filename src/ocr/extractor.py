@@ -1,4 +1,5 @@
 import os
+import glob
 import ntpath
 import json
 import numpy as np
@@ -61,26 +62,28 @@ class InfoExtractor:
 
         return
 
-    def run(self, file_path):
-        file_name = ntpath.basename(file_path).replace(".pdf", "")
-        pdf_frames = [np.array(page) for page in convert_from_path(file_path, 200)]
+    def run(self, dir_path):
+        files = glob.glob(os.path.join(dir_path, "*.pdf"))
+        for f_path in files:
+            file_name = ntpath.basename(f_path).replace(".pdf", "")
+            pdf_frames = [np.array(page) for page in convert_from_path(f_path, 200)]
 
-        tmp_image_path = os.path.join(JSON_DIR, "tmp.jpg")
+            tmp_image_path = os.path.join(JSON_DIR, "tmp.jpg")
 
-        for page_idx, p_frame in enumerate(pdf_frames):
-            if page_idx < PAGE_NUM - 1:
-                continue
-            print(f"[INFO] Processing Page {page_idx + 1}...")
-            cv2.imwrite(tmp_image_path, p_frame)
-            self.get_info_one_page(image_path=tmp_image_path, file_name=file_name, page_num=page_idx + 1)
+            for page_idx, p_frame in enumerate(pdf_frames):
+                if page_idx < PAGE_NUM - 1:
+                    continue
+                print(f"[INFO] Processing Page {page_idx + 1}...")
+                cv2.imwrite(tmp_image_path, p_frame)
+                self.get_info_one_page(image_path=tmp_image_path, file_name=file_name, page_num=page_idx + 1)
 
-        for col_idx in range(COLUMN_NUM_LIMIT):
-            output_file_path = os.path.join(OUTPUT_DIR, f"{file_name}_{col_idx + 1}.csv")
-            pd.DataFrame(self.table_data[col_idx + 1]).to_csv(output_file_path, index=False, header=False, mode="w")
-            print(f"[INFO] Saved result with {col_idx + 1} columns into {output_file_path}")
+            for col_idx in range(COLUMN_NUM_LIMIT):
+                output_file_path = os.path.join(OUTPUT_DIR, f"{file_name}_{col_idx + 1}.csv")
+                pd.DataFrame(self.table_data[col_idx + 1]).to_csv(output_file_path, index=False, header=False, mode="w")
+                print(f"[INFO] Saved result with {col_idx + 1} columns into {output_file_path}")
 
-        return
+            return
 
 
 if __name__ == '__main__':
-    InfoExtractor().run(file_path="")
+    InfoExtractor().run(dir_path="")
