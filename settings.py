@@ -10,6 +10,6 @@ CONFIG_FILE = os.path.join(CUR_DIR, 'config.cfg')
 
 Y_BIND_THRESH = 0.01
 
-COLUMN_NUM = 6
+COLUMN_NUM_LIMIT = 6
 PAGE_NUM = 7
 FILE_PATH = ""
