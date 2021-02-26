@@ -73,7 +73,7 @@ class InfoExtractor:
             for page_idx, p_frame in enumerate(pdf_frames):
                 if page_idx < PAGE_NUM - 1:
                     continue
-                print(f"[INFO] Processing Page {page_idx + 1}...")
+                print(f"[INFO] {file_name}, Processing Page {page_idx + 1}...")
                 cv2.imwrite(tmp_image_path, p_frame)
                 self.get_info_one_page(image_path=tmp_image_path, file_name=file_name, page_num=page_idx + 1)
 
