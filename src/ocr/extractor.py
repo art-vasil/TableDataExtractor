@@ -65,6 +65,7 @@ class InfoExtractor:
     def run(self, dir_path):
         files = glob.glob(os.path.join(dir_path, "*.pdf"))
         for f_path in files:
+            self.__initialize()
             file_name = ntpath.basename(f_path).replace(".pdf", "")
             pdf_frames = [np.array(page) for page in convert_from_path(f_path, 200)]
 
@@ -82,7 +83,7 @@ class InfoExtractor:
                 pd.DataFrame(self.table_data[col_idx + 1]).to_csv(output_file_path, index=False, header=False, mode="w")
                 print(f"[INFO] Saved result with {col_idx + 1} columns into {output_file_path}")
 
-            return
+        return
 
 
 if __name__ == '__main__':
