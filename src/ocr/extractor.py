@@ -86,6 +86,8 @@ class InfoExtractor:
                             break
                     if not col_ret:
                         tmp_table_data.append([""])
+            tmp_table_data.append([page_num])
+            tmp_table_data.append([file_name])
             pd.DataFrame(tmp_table_data).T.to_csv(output_file_path, header=False, index=False, mode="a")
             self.row_id += 1
 
